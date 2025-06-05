@@ -21,6 +21,28 @@ const registroExitoso = async (userEmail, userName) => {
   };
 };
 
+const recoveryPassEmail = async (userEmail, token) => {
+  const info = await transporter.sendMail({
+    from: `"Comision-web-10" <${process.env.GMAIL_USER}>`,
+    to: `${userEmail}`,
+    subject: `Falta poco para que recuperes tu contraseña ✔`,
+    html: `
+    <img src="https://media.tenor.com/FWMGiswEeZUAAAAM/password.gif" alt="gif1">
+    <h1>Gracias por ser parte de esta comunidad</h1>
+    <a href="${process.env.URL_FRONT}/recoveryPass?token=${token}">Ir a la pagina</a>
+    
+    `, // HTML body
+  });
+
+  console.log(info);
+
+  return {
+    info: info.response.includes("OK"),
+    rejected: info.rejected,
+  };
+};
+
 module.exports = {
   registroExitoso,
+  recoveryPassEmail,
 };

@@ -1,4 +1,8 @@
 const { MercadoPagoConfig, Preference } = require("mercadopago");
+const UsuariosModel = require("../model/usuarios.model");
+const jwt = require("jsonwebtoken");
+const argon = require("argon2");
+const { recoveryPassEmail } = require("../helpers/messages.helpers");
 
 const mercadoPagoConfigServices = async (carrito) => {
   try {
@@ -32,18 +36,24 @@ const mercadoPagoConfigServices = async (carrito) => {
           },
         ],
         back_urls: {
-          success: "http://localhost:5173/success",
-          failure: "http://localhost:5173/failure",
-          pending: "http://localhost:5173/pending",
+          success: `${process.env.FRONT_URL}/user/cart?success`,
+          failure: `${process.env.FRONT_URL}/user/cart?failure`,
+          pending: `${process.env.FRONT_URL}/user/cart?pending`,
         },
       },
     });
 
     console.log(res);
 
-    return {
+    /*     return {
       msg: "Compra pagada con exito",
       urlRes: res.init_point,
+      statusCode: 200,
+    }; */
+
+    return {
+      msg: "Compra pagada con exito",
+      urlRes: res.id,
       statusCode: 200,
     };
   } catch (error) {
@@ -55,4 +65,75 @@ const mercadoPagoConfigServices = async (carrito) => {
   }
 };
 
-module.exports = mercadoPagoConfigServices;
+const sendEmailRecoveryPassUserServices = async (emailUsuario) => {
+  try {
+    const usuario = await UsuariosModel.findOne({ emailUsuario });
+    if (!usuario) {
+      return {
+        msg: "Problema al intentar buscar el usuario",
+        statusCode: 404,
+      };
+    }
+
+    const payload = {
+      idUsuario: usuario._id,
+    };
+
+    const token = jwt.sign(payload, process.env.JWT_SECRET_RECOVERY_PASS);
+
+    await recoveryPassEmail(emailUsuario, token);
+
+    return {
+      msg: "Envio del correo fue exitoso",
+      statusCode: 200,
+    };
+  } catch (error) {
+    console.log(error);
+    return {
+      error,
+      statusCode: 500,
+    };
+  }
+};
+
+const changePassUserServices = async (token, nuevaContrasenia) => {
+  try {
+    const verificarUsuario = jwt.verify(
+      token,
+      process.env.JWT_SECRET_RECOVERY_PASS
+    );
+    const usuario = await UsuariosModel.findOne({
+      _id: verificarUsuario.idUsuario,
+    });
+
+    if (!usuario) {
+      return {
+        msg: "Problema al buscar al usuario",
+        statusCode: 404,
+      };
+    }
+
+    const nuevaContraseHash = await argon.hash(nuevaContrasenia);
+
+    usuario.contrasenia = nuevaContraseHash;
+
+    await usuario.save();
+
+    return {
+      msg: "Contraseña cambiada con exito",
+      statusCode: 200,
+    };
+  } catch (error) {
+    console.log(error);
+    return {
+      error,
+      statusCode: 500,
+    };
+  }
+};
+
+module.exports = {
+  mercadoPagoConfigServices,
+  sendEmailRecoveryPassUserServices,
+  changePassUserServices,
+};
