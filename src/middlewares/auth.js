@@ -1,11 +1,9 @@
 const jwt = require("jsonwebtoken");
 
 module.exports = (rolRuta) => (req, res, next) => {
-  console.log(rolRuta);
   const token = req.header("auth");
-
   const verificarToken = jwt.verify(token, process.env.JWT_SECRET);
-  console.log(verificarToken);
+
   if (verificarToken.rolUsuario === rolRuta) {
     req.idUsuario = verificarToken.idUsuario;
     req.idCarrito = verificarToken.idCarrito;
