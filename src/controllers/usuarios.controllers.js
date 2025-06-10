@@ -36,7 +36,6 @@ const obtenerUnUsuarioPorId = async (req, res) => {
 };
 
 const registroUsuario = async (req, res) => {
-  console.log(req.body);
   const resValidation = validationResult(req);
 
   if (!resValidation.isEmpty()) {

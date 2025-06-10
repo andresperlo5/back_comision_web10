@@ -41,7 +41,6 @@ const obtenerUnProductoPorIdArray = async (idProducto) => {
 
 const crearNuevoProductoArray = async (body, req) => {
   try {
-    console.log(body);
     const nuevoProducto = new ProductosModel(body);
     nuevoProducto.save();
     /*     const imagen = await cloudinary.uploader.upload(req.file.path);
@@ -54,7 +53,6 @@ const crearNuevoProductoArray = async (body, req) => {
       idProducto: nuevoProducto._id,
     };
   } catch (error) {
-    console.log(error);
     return {
       error,
       statusCode: 500,
@@ -63,7 +61,6 @@ const crearNuevoProductoArray = async (body, req) => {
 };
 
 const agregarImagenDB = async (idProducto, file) => {
-  console.log(file);
   const producto = await ProductosModel.findOne({ _id: idProducto });
   producto.imagen = file.path;
   await producto.save();

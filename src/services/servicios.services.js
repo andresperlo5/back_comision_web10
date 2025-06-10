@@ -43,8 +43,6 @@ const mercadoPagoConfigServices = async (carrito) => {
       },
     });
 
-    console.log(res);
-
     /*     return {
       msg: "Compra pagada con exito",
       urlRes: res.init_point,
@@ -57,7 +55,6 @@ const mercadoPagoConfigServices = async (carrito) => {
       statusCode: 200,
     };
   } catch (error) {
-    console.log(error);
     return {
       error,
       statusCode: 500,
@@ -88,7 +85,6 @@ const sendEmailRecoveryPassUserServices = async (emailUsuario) => {
       statusCode: 200,
     };
   } catch (error) {
-    console.log(error);
     return {
       error,
       statusCode: 500,
@@ -124,7 +120,6 @@ const changePassUserServices = async (token, nuevaContrasenia) => {
       statusCode: 200,
     };
   } catch (error) {
-    console.log(error);
     return {
       error,
       statusCode: 500,

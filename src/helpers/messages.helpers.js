@@ -13,8 +13,6 @@ const registroExitoso = async (userEmail, userName) => {
     `, // HTML body
   });
 
-  console.log(info);
-
   return {
     info: info.response.includes("OK"),
     rejected: info.rejected,
@@ -33,9 +31,6 @@ const recoveryPassEmail = async (userEmail, token) => {
     
     `, // HTML body
   });
-
-  console.log(info);
-
   return {
     info: info.response.includes("OK"),
     rejected: info.rejected,

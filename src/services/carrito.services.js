@@ -9,7 +9,6 @@ const obtenerTodosLosProductosDelCarritoBD = async (idCarrito) => {
       statusCode: 200,
     };
   } catch (error) {
-    console.log(error);
     return {
       error,
       statusCode: 500,
@@ -34,7 +33,6 @@ const agregarProductoAlCarritoBD = async (idCarrito, idProducto) => {
     }
 
     carrito.productos.push(producto);
-    console.log(carrito);
     await carrito.save();
 
     return {

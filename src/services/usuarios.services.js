@@ -50,7 +50,7 @@ const obtenerUnUsuarioPorIdDb = async (idUsuario) => {
 };
 
 const registroUsuariosDb = async (body) => {
-  console.log(body);
+  body;
   try {
     const nuevoUsuario = new UsuariosModel(body);
     const nuevoCarrito = new CarritoModel();
@@ -84,7 +84,6 @@ const registroUsuariosDb = async (body) => {
       };
     }
   } catch (error) {
-    console.log(error);
     return {
       error,
       statusCode: 500,
@@ -178,7 +177,6 @@ const inicioSesionUsuarioDb = async (body) => {
       };
     }
   } catch (error) {
-    console.log(error);
     return {
       error,
       statusCode: 500,

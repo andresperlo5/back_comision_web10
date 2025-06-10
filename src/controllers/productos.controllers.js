@@ -36,7 +36,6 @@ const obtenrUnProducto = async (req, res) => {
 };
 
 const crearProducto = async (req, res) => {
-  console.log(req.body);
   const resValidation = validationResult(req);
 
   if (!resValidation.isEmpty()) {
@@ -55,7 +54,6 @@ const crearProducto = async (req, res) => {
 };
 
 const agregarImagen = async (req, res) => {
-  console.log("fileReq", req.file);
   const { msg, statusCode, idProducto } = await agregarImagenDB(
     req.params.id,
     req.file
